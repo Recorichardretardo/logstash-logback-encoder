@@ -169,6 +169,22 @@ public class HelloWorldController {
 	}
 	
 	
+	@RequestMapping("/log17")
+	public String log17() {
+		/*
+		 * Add "name":"value" ONLY to the JSON output.
+		 *
+		 * Since there is no parameter for the argument,
+		 * the formatted message will NOT contain the key/value.
+		 *
+		 * If this looks funny to you or to static analyzers,
+		 * consider using Markers instead.
+		 */
+		log.info("log message", keyValue("name", "value"));
+		return "Hello StructuredLoggingTests log17()";
+	}
+	
+	
 	
 	
 	static class Order {
