@@ -6,6 +6,13 @@ import static net.logstash.logback.argument.StructuredArguments.v;
 import static net.logstash.logback.argument.StructuredArguments.value;
 
 import static net.logstash.logback.marker.Markers.append;
+import static net.logstash.logback.marker.Markers.appendRaw;
+import static net.logstash.logback.marker.Markers.appendArray;
+import static net.logstash.logback.marker.Markers.appendEntries;
+
+import java.util.HashMap;
+import java.util.Map;
+
 
 
 
@@ -107,6 +114,14 @@ public class HelloWorldController {
 		return "Hello StructuredLoggingTests log10()";
 	}
 	
+	@RequestMapping("/log19")
+	public String log19() {
+		 Order order = new Order("123", "NEW", null);
+		 log.info("Order saved", v("order", order));
+		return "Hello StructuredLoggingTests log19()";
+	}
+	
+	
 	@RequestMapping("/log11")
 	public String log11() {
 		 String oldStatus = "NEW";
@@ -184,8 +199,72 @@ public class HelloWorldController {
 		return "Hello StructuredLoggingTests log17()";
 	}
 	
+	@RequestMapping("/log18")
+	public String log18() {
+		/*
+		 * Add "name":"value" to the JSON output and
+		 * add name=[value] to the formatted message using a custom format.
+		 */
+		log.info("log message {}", keyValue("name", "value", "{0}=[{1}]"));
+		return "Hello StructuredLoggingTests log18()";
+	}
 	
 	
+	@RequestMapping("/log20")
+	public String log20() {
+		/*
+		 * Add "name":"value" to the JSON output.
+		 */
+		log.info(append("name", "value"), "log message");
+		return "Hello StructuredLoggingTests log20()";
+	}
+	
+	@RequestMapping("/log21")
+	public String log21() {
+		/*
+		 * Add "name1":"value1","name2":"value2" to the JSON output by using multiple markers.
+		 */
+		log.info(append("name1", "value1").and(append("name2", "value2")), "log message");
+		return "Hello StructuredLoggingTests log21()";
+	}
+	
+	@RequestMapping("/log22")
+	public String log22() {
+		/*
+		 * Add "array":[1,2,3] to the JSON output by using raw json.
+		 * This allows you to use your own json seralization routine to construct the json output
+		 */
+		log.info(appendRaw("array", "[1,2,3]"), "log message");
+		return "Hello StructuredLoggingTests log22()";
+	}
+	
+	
+	@RequestMapping("/log23")
+	public String log23() {
+
+		/*
+		 * Add "array":[1,2,3] to the JSON output
+		 */
+		log.info(appendArray("array", 1, 2, 3), "log message");
+		return "Hello StructuredLoggingTests log23()";
+	}
+	
+	@RequestMapping("/log24")
+	public String log24() {
+
+		/*
+		 * Add "name1":"value1","name2":"value2" to the JSON output by using a map.
+		 *
+		 * Note the values can be any object that can be serialized by Jackson's ObjectMapper
+		 * (e.g. other Maps, JsonNodes, numbers, arrays, etc)
+		 */
+		Map myMap = new HashMap();
+		myMap.put("name1", "value1");
+		myMap.put("name2", "value2");
+		log.info(appendEntries(myMap), "log message");
+		
+		return "Hello StructuredLoggingTests log24()";
+	}
 	
 	static class Order {
 	    String orderId;
